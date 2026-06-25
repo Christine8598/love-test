@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<title>AI 戀愛人格測驗</title>
+
+
+
+<style>
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+
+body{
+
+    font-family:-apple-system,BlinkMacSystemFont,"Microsoft JhengHei",sans-serif;
+
+    background:linear-gradient(135deg,#ffd6e7,#ffeaf3);
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+}
+
+
+
+.card{
+
+    width:90%;
+
+    max-width:700px;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+
+}
+
+
+
+h1{
+
+    color:#ff4f93;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.question{
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    margin:30px 0;
+
+}
+
+
+
+button{
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:999px;
+
+    padding:16px 30px;
+
+    font-size:20px;
+
+    margin:10px;
+
+    transition:.25s;
+
+}
+
+
+
+.primary{
+
+    background:#ff4f93;
+
+    color:white;
+
+}
+
+
+
+.secondary{
+
+    background:#777;
+
+    color:white;
+
+}
+
+
+
+.blue{
+
+    background:#4b8cff;
+
+    color:white;
+
+}
+
+
+
+.hidden{
+
+    display:none;
+
+}
+
+
+
+.message{
+
+    margin-top:25px;
+
+    font-size:20px;
+
+    color:#ff4f93;
+
+    font-weight:bold;
+
+    min-height:40px;
+
+}
+
+
+
+.heart{
+
+    position:fixed;
+
+    font-size:28px;
+
+    pointer-events:none;
+
+    animation:floatUp 5s linear forwards;
+
+}
+
+
+
+@keyframes floatUp{
+
+    from{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+    }
+
+    to{
+
+        transform:translateY(-110vh);
+
+        opacity:0;
+
+    }
+
+}
+
+
+
+@media(max-width:600px){
+
+
+
+    .card{
+
+        padding:25px;
+
+    }
+
+
+
+    .question{
+
+        font-size:24px;
+
+    }
+
+
+
+    button{
+
+        width:100%;
+
+        margin:8px 0;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="card">
+
+
+
+    <!-- 第一題 -->
+
+    <div id="page1">
+
+
+
+        <h1>💖 AI 戀愛人格測驗 💖</h1>
+
+
+
+        <div class="question">
+
+            你愛我嗎？
+
+        </div>
+
+
+
+        <button class="primary" onclick="goQuestion2()">
+
+            超愛我美麗的女友 Christine
+
+        </button>
+
+
+
+        <button
+
+            id="noLoveBtn"
+
+            class="secondary"
+
+            onclick="shrinkNoLove()">
+
+            不愛
+
+        </button>
+
+
+
+        <div class="message" id="msg1"></div>
+
+
+
+    </div>
+
+
+
+    <!-- 第二題 -->
+
+    <div id="page2" class="hidden">
+
+
+
+        <h1>👑 第二題 👑</h1>
+
+
+
+        <div class="question">
+
+            家裡誰最大？
+
+        </div>
+
+
+
+        <button
+
+            class="primary"
+
+            onclick="showResult()">
+
+            我美麗的女友 Christine
+
+        </button>
+
+
+
+        <button
+
+            id="tonyBtn"
+
+            class="blue">
+
+            帥氣無比的 Tony
+
+        </button>
+
+
+
+        <div class="message" id="msg2"></div>
+
+
+
+    </div>
+
+
+
+    <!-- 結局 -->
+
+    <div id="result" class="hidden">
+
+
+
+        <h1>🎉 恭喜通過求生測驗 🎉</h1>
+
+
+
+        <h2 style="margin-top:20px;">
+
+            生存率：100%
+
+        </h2>
+
+
+
+        <h2 style="margin-top:15px;">
+
+            最愛的人：Christine ❤️
+
+        </h2>
+
+
+
+        <h2 style="margin-top:15px;">
+
+            家裡最大：Christine 👑
+
+        </h2>
+
+
+
+        <p style="margin-top:25px;font-size:20px;">
+
+            系統判定：
+
+            Tony 非常有求生慾 😆
+
+        </p>
+
+
+
+        <br>
+
+
+
+        <button class="primary" onclick="buyAll()">
+
+            我願意幫 Christine 買飲料
+
+        </button>
+
+
+
+        <button class="primary" onclick="buyAll()">
+
+            我願意幫 Christine 買晚餐
+
+        </button>
+
+
+
+        <button class="primary" onclick="buyAll()">
+
+            我願意幫 Christine 買珍珠奶茶
+
+        </button>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+<script>
+
+
+
+let scaleSize = 1;
+
+
+
+/* Android 震動 */
+
+function vibrate(pattern){
+
+
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(pattern);
+
+    }
+
+
+
+}
+
+
+
+/* 第一題 */
+
+
+
+function shrinkNoLove(){
+
+
+
+    vibrate(250);
+
+
+
+    scaleSize -= 0.15;
+
+
+
+    if(scaleSize < 0.08){
+
+        scaleSize = 0.08;
+
+    }
+
+
+
+    const btn = document.getElementById("noLoveBtn");
+
+
+
+    btn.style.transform = `scale(${scaleSize})`;
+
+
+
+    const texts = [
+
+        "🥺 你是不是按錯了？",
+
+        "😏 再想想看喔～",
+
+        "⚠️ 系統偵測到危險答案",
+
+        "💔 Christine 有點難過",
+
+        "🚨 生存率下降中..."
+
+    ];
+
+
+
+    document.getElementById("msg1").innerHTML =
+
+        texts[Math.floor(Math.random()*texts.length)];
+
+
+
+    if(scaleSize <= 0.4){
+
+
+
+        vibrate([150,100,150,100,400]);
+
+
+
+        document.getElementById("msg1").innerHTML =
+
+            "🚨 Christine 已收到警報通知！";
+
+    }
+
+}
+
+
+
+function goQuestion2(){
+
+
+
+    document.getElementById("page1")
+
+        .classList.add("hidden");
+
+
+
+    document.getElementById("page2")
+
+        .classList.remove("hidden");
+
+}
+
+
+
+/* 第二題 */
+
+
+
+const tonyBtn = document.getElementById("tonyBtn");
+
+
+
+tonyBtn.addEventListener("mouseover",runAway);
+
+tonyBtn.addEventListener("touchstart",runAway);
+
+
+
+function runAway(){
+
+
+
+    vibrate(80);
+
+
+
+    const x =
+
+        Math.random() *
+
+        (window.innerWidth - 250);
+
+
+
+    const y =
+
+        Math.random() *
+
+        (window.innerHeight - 100);
+
+
+
+    tonyBtn.style.position = "fixed";
+
+    tonyBtn.style.left = x + "px";
+
+    tonyBtn.style.top = y + "px";
+
+
+
+    document.getElementById("msg2").innerHTML =
+
+        "🤣 Tony 不敢跟 Christine 搶地位";
+
+}
+
+
+
+function showResult(){
+
+
+
+    document.getElementById("page2")
+
+        .classList.add("hidden");
+
+
+
+    document.getElementById("result")
+
+        .classList.remove("hidden");
+
+
+
+    startHearts();
+
+}
+
+
+
+/* 愛心動畫 */
+
+
+
+function startHearts(){
+
+
+
+    setInterval(()=>{
+
+
+
+        const heart =
+
+            document.createElement("div");
+
+
+
+        heart.className = "heart";
+
+
+
+        heart.innerHTML =
+
+            ["❤️","💕","💖","💗","💘"]
+
+            [Math.floor(Math.random()*5)];
+
+
+
+        heart.style.left =
+
+            Math.random()*window.innerWidth
+
+            + "px";
+
+
+
+        heart.style.bottom = "-30px";
+
+
+
+        document.body.appendChild(heart);
+
+
+
+        setTimeout(()=>{
+
+            heart.remove();
+
+        },5000);
+
+
+
+    },300);
+
+}
+
+
+
+/* 結局 */
+
+
+
+function buyAll(){
+
+
+
+    vibrate([100,50,100]);
+
+
+
+    alert(
+
+`💖 感謝您的支持 💖
+
+
+
+系統已自動為您勾選：
+
+
+
+✅ 買飲料
+
+✅ 買晚餐
+
+✅ 買珍珠奶茶
+
+
+
+Christine 表示非常滿意 😆`
+
+    );
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
