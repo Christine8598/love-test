@@ -247,7 +247,7 @@ function vibrate(pattern){
     }
 }
 
-/* 第一題邏輯 */
+/* 第一題邏輯：你愛我嗎 */
 function shrinkNoLove(){
     vibrate(250);
     scaleSize -= 0.15;
@@ -273,7 +273,7 @@ function goQuestion2(){
     document.getElementById("page2").classList.remove("hidden");
 }
 
-/* 第二題邏輯 */
+/* 第二題邏輯：家裡誰最大 */
 const tonyBtn = document.getElementById("tonyBtn");
 tonyBtn.addEventListener("mouseover",runAway);
 tonyBtn.addEventListener("touchstart",runAway);
@@ -289,15 +289,18 @@ function runAway(){
 }
 
 function goQuestion3(){
+    // 清除可能因為亂跑殘留的 fixed 樣式，避免干擾下一題
+    tonyBtn.style.position = "static"; 
     document.getElementById("page2").classList.add("hidden");
     document.getElementById("page3").classList.remove("hidden");
 }
 
-/* 第三題碎裂與煙火邏輯 */
+/* 第三題邏輯：購物慾測驗 */
 function shatterButton(btn){
   vibrate(100);
 
   if (btn.innerText.includes("想要的都買")) {
+    // 答對了：變綠色、放煙火、兩秒後進結局並飄愛心
     btn.style.backgroundColor = "#4caf50"; 
     document.getElementById("msg3").innerText = "💖 這才是完美答案！";
     startFireworks();
@@ -306,27 +309,12 @@ function shatterButton(btn){
       document.getElementById("page3").classList.add("hidden");
       document.getElementById("result").classList.remove("hidden");
       stopFireworks();
-      startHearts(); // 進入結局後開始飄愛心
+      startHearts(); 
     }, 2000); 
   } else {
+    // 答錯了：按鈕當場碎裂消失
     btn.style.animation = "shatter 0.5s ease-out forwards"; 
     document.getElementById("msg3").innerText = "💥 生存警報！Christine 覺得不夠完整！";
     
     const numFragments = 8;
-    const btnRect = btn.getBoundingClientRect();
-    const btnText = btn.innerText;
-
-    for (let i = 0; i < numFragments; i++) {
-      const frag = document.createElement('div');
-      frag.className = 'fragment';
-      frag.innerText = btnText;
-      
-      const x = btnRect.left + (btnRect.width / 2);
-      const y = btnRect.top + (btnRect.height / 2);
-      frag.style.left = x - 25 + 'px'; 
-      frag.style.top = y - 10 + 'px';
-
-      const randX = (Math.random() - 0.5) * 600; 
-      const randY = (Math.random() - 0.5) * 600;
-      frag.style.setProperty('--x', randX + 'px');
-      frag.style.setProperty
+    const btnRect = btn
