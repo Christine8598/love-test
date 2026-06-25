@@ -317,4 +317,65 @@ function shatterButton(btn){
     document.getElementById("msg3").innerText = "💥 生存警報！Christine 覺得不夠完整！";
     
     const numFragments = 8;
-    const btnRect = btn
+    const btnRect = btn.getBoundingClientRect();
+    const btnText = btn.innerText;
+
+    for (let i = 0; i < numFragments; i++) {
+      const frag = document.createElement('div');
+      frag.className = 'fragment';
+      frag.innerText = btnText;
+      
+      const x = btnRect.left + (btnRect.width / 2);
+      const y = btnRect.top + (btnRect.height / 2);
+      frag.style.left = x - 25 + 'px'; 
+      frag.style.top = y - 10 + 'px';
+
+      const randX = (Math.random() - 0.5) * 600; 
+      const randY = (Math.random() - 0.5) * 600;
+      frag.style.setProperty('--x', randX + 'px');
+      frag.style.setProperty('--y', randY + 'px');
+
+      document.body.appendChild(frag);
+
+      setTimeout(() => { frag.remove(); }, 500);
+    }
+  
+    setTimeout(() => { btn.style.display = 'none'; }, 500);
+  }
+}
+
+function startFireworks() {
+  document.getElementById("fireworks").classList.remove("hidden");
+}
+
+function stopFireworks() {
+  document.getElementById("fireworks").classList.add("hidden");
+}
+
+/* 結局飄愛心動畫 */
+function startHearts(){
+    setInterval(()=>{
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = ["❤️","💕","💖","💗","💘"][Math.floor(Math.random()*5)];
+        heart.style.left = Math.random()*window.innerWidth + "px";
+        heart.style.bottom = "-30px";
+        document.body.appendChild(heart);
+        setTimeout(()=>{ heart.remove(); },5000);
+    },300);
+}
+
+/* 結局點擊小卡 */
+function buyAll(){
+    vibrate([100,50,100]);
+    alert( `💖 恭喜完成認證 💖
+
+Tony 已成功解鎖最高求生境界！
+主動遞上魔法小卡 💳✨
+
+Christine 表示滿意，今天也是幸福的一天 🥰` );
+}
+</script>
+
+</body>
+</html>
