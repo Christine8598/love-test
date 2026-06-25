@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>AI 戀愛人格測驗 - 進階求生版</title>
+<title>戀愛人格測驗 - 求生版</title>
 
 <style>
 /* 基礎設定與動畫 */
@@ -175,25 +175,8 @@ button{
 <body>
 
 <div class="card">
-    <div id="page0">
-        <h1>🛍️ 購物慾測驗 🛍️</h1>
-        <div class="question">
-            你願意幫 Christine 買什麼？
-        </div>
-        <button class="primary shatt" onclick="shatterButton(this)">
-            買包包 👜
-        </button>
-        <button class="primary shatt" onclick="shatterButton(this)">
-            買晚餐 🍽️
-        </button>
-        <button class="primary shatt" onclick="shatterButton(this)">
-            只要是 Christine 想要的都買～ 💖
-        </button>
-        <div class="message" id="msg0"></div>
-    </div>
-
-    <div id="page1" class="hidden">
-        <h1>💖 AI 戀愛人格測驗 💖</h1>
+    <div id="page1">
+        <h1>💖 戀愛人格測驗 💖</h1>
         <div class="question"> 你愛我嗎？ </div>
         <button class="primary" onclick="goQuestion2()">
             超愛我美麗的女友 Christine
@@ -207,13 +190,30 @@ button{
     <div id="page2" class="hidden">
         <h1>👑 第二題 👑</h1>
         <div class="question"> 家裡誰最大？ </div>
-        <button class="primary" onclick="showResult()">
+        <button class="primary" onclick="goQuestion3()">
             我美麗的女友 Christine
         </button>
         <button id="tonyBtn" class="blue">
             帥氣無比的 Tony
         </button>
         <div class="message" id="msg2"></div>
+    </div>
+
+    <div id="page3" class="hidden">
+        <h1>🛍️ 購物慾測驗 🛍️</h1>
+        <div class="question">
+            你願意幫 Christine 買什麼？
+        </div>
+        <button class="primary shatt" onclick="shatterButton(this)">
+            買包包 👜
+        </button>
+        <button class="primary shatt" onclick="shatterButton(this)">
+            買晚餐 🍽️
+        </button>
+        <button class="primary shatt" onclick="shatterButton(this)">
+            只要是 Christine 想要的都買～ 💖
+        </button>
+        <div class="message" id="msg3"></div>
     </div>
 
     <div id="result" class="hidden">
@@ -247,61 +247,7 @@ function vibrate(pattern){
     }
 }
 
-/* 碎裂與煙火 */
-function shatterButton(btn){
-  vibrate(100);
-
-  if (btn.innerText.includes("想要的都買")) {
-    btn.style.backgroundColor = "#4caf50"; 
-    document.getElementById("msg0").innerText = "💖 這才是完美答案！";
-    startFireworks();
-    vibrate([200, 100, 200, 100, 500]);
-    setTimeout(() => {
-      document.getElementById("page0").classList.add("hidden");
-      document.getElementById("page1").classList.remove("hidden");
-      stopFireworks();
-    }, 2000); 
-  } else {
-    btn.style.animation = "shatter 0.5s ease-out forwards"; 
-    document.getElementById("msg0").innerText = "💥 生存警報！Christine 覺得不夠完整！";
-    
-    const numFragments = 8;
-    const btnRect = btn.getBoundingClientRect();
-    const btnText = btn.innerText;
-
-    for (let i = 0; i < numFragments; i++) {
-      const frag = document.createElement('div');
-      frag.className = 'fragment';
-      frag.innerText = btnText;
-      
-      const x = btnRect.left + (btnRect.width / 2);
-      const y = btnRect.top + (btnRect.height / 2);
-      frag.style.left = x - 25 + 'px'; 
-      frag.style.top = y - 10 + 'px';
-
-      const randX = (Math.random() - 0.5) * 600; 
-      const randY = (Math.random() - 0.5) * 600;
-      frag.style.setProperty('--x', randX + 'px');
-      frag.style.setProperty('--y', randY + 'px');
-
-      document.body.appendChild(frag);
-
-      setTimeout(() => { frag.remove(); }, 500);
-    }
-  
-    setTimeout(() => { btn.style.display = 'none'; }, 500);
-  }
-}
-
-function startFireworks() {
-  document.getElementById("fireworks").classList.remove("hidden");
-}
-
-function stopFireworks() {
-  document.getElementById("fireworks").classList.add("hidden");
-}
-
-/* 第一題 */
+/* 第一題邏輯 */
 function shrinkNoLove(){
     vibrate(250);
     scaleSize -= 0.15;
@@ -327,7 +273,7 @@ function goQuestion2(){
     document.getElementById("page2").classList.remove("hidden");
 }
 
-/* 第二題 */
+/* 第二題邏輯 */
 const tonyBtn = document.getElementById("tonyBtn");
 tonyBtn.addEventListener("mouseover",runAway);
 tonyBtn.addEventListener("touchstart",runAway);
@@ -342,36 +288,45 @@ function runAway(){
     document.getElementById("msg2").innerHTML = "🤣 Tony 不敢跟 Christine 搶地位";
 }
 
-function showResult(){
+function goQuestion3(){
     document.getElementById("page2").classList.add("hidden");
-    document.getElementById("result").classList.remove("hidden");
-    startHearts();
+    document.getElementById("page3").classList.remove("hidden");
 }
 
-/* 愛心動畫 */
-function startHearts(){
-    setInterval(()=>{
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = ["❤️","💕","💖","💗","💘"][Math.floor(Math.random()*5)];
-        heart.style.left = Math.random()*window.innerWidth + "px";
-        heart.style.bottom = "-30px";
-        document.body.appendChild(heart);
-        setTimeout(()=>{ heart.remove(); },5000);
-    },300);
-}
+/* 第三題碎裂與煙火邏輯 */
+function shatterButton(btn){
+  vibrate(100);
 
-/* 結局 */
-function buyAll(){
-    vibrate([100,50,100]);
-    alert( `💖 恭喜完成認證 💖
+  if (btn.innerText.includes("想要的都買")) {
+    btn.style.backgroundColor = "#4caf50"; 
+    document.getElementById("msg3").innerText = "💖 這才是完美答案！";
+    startFireworks();
+    vibrate([200, 100, 200, 100, 500]);
+    setTimeout(() => {
+      document.getElementById("page3").classList.add("hidden");
+      document.getElementById("result").classList.remove("hidden");
+      stopFireworks();
+      startHearts(); // 進入結局後開始飄愛心
+    }, 2000); 
+  } else {
+    btn.style.animation = "shatter 0.5s ease-out forwards"; 
+    document.getElementById("msg3").innerText = "💥 生存警報！Christine 覺得不夠完整！";
+    
+    const numFragments = 8;
+    const btnRect = btn.getBoundingClientRect();
+    const btnText = btn.innerText;
 
-Tony 已成功解鎖最高求生境界！
-主動遞上魔法小卡 💳✨
+    for (let i = 0; i < numFragments; i++) {
+      const frag = document.createElement('div');
+      frag.className = 'fragment';
+      frag.innerText = btnText;
+      
+      const x = btnRect.left + (btnRect.width / 2);
+      const y = btnRect.top + (btnRect.height / 2);
+      frag.style.left = x - 25 + 'px'; 
+      frag.style.top = y - 10 + 'px';
 
-Christine 表示滿意，今天也是幸福的一天 🥰` );
-}
-</script>
-
-</body>
-</html>
+      const randX = (Math.random() - 0.5) * 600; 
+      const randY = (Math.random() - 0.5) * 600;
+      frag.style.setProperty('--x', randX + 'px');
+      frag.style.setProperty
