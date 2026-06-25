@@ -1,721 +1,377 @@
 <!DOCTYPE html>
-
 <html lang="zh-Hant">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-
-<title>AI 戀愛人格測驗</title>
-
-
+<title>AI 戀愛人格測驗 - 進階求生版</title>
 
 <style>
-
+/* 基礎設定與動畫 */
 *{
-
     margin:0;
-
     padding:0;
-
     box-sizing:border-box;
-
 }
-
-
 
 body{
-
     font-family:-apple-system,BlinkMacSystemFont,"Microsoft JhengHei",sans-serif;
-
     background:linear-gradient(135deg,#ffd6e7,#ffeaf3);
-
     min-height:100vh;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
-    overflow:hidden;
-
+    overflow-x:hidden;
 }
-
-
 
 .card{
-
     width:90%;
-
     max-width:700px;
-
     background:white;
-
     padding:40px;
-
     border-radius:30px;
-
     text-align:center;
-
     box-shadow:0 15px 40px rgba(0,0,0,.15);
-
+    position:relative;
+    z-index: 10;
 }
-
-
 
 h1{
-
     color:#ff4f93;
-
     margin-bottom:20px;
-
 }
-
-
 
 .question{
-
     font-size:30px;
-
     font-weight:bold;
-
     margin:30px 0;
-
 }
-
-
 
 button{
-
     border:none;
-
     cursor:pointer;
-
     border-radius:999px;
-
     padding:16px 30px;
-
     font-size:20px;
-
     margin:10px;
-
-    transition:.25s;
-
+    transition:.25s ease-out;
 }
-
-
 
 .primary{
-
     background:#ff4f93;
-
     color:white;
-
 }
-
-
 
 .secondary{
-
     background:#777;
-
     color:white;
-
 }
-
-
 
 .blue{
-
     background:#4b8cff;
-
     color:white;
-
 }
 
-
+.green{
+    background:#4caf50;
+    color:white;
+}
 
 .hidden{
-
     display:none;
-
 }
-
-
 
 .message{
-
     margin-top:25px;
-
     font-size:20px;
-
     color:#ff4f93;
-
     font-weight:bold;
-
     min-height:40px;
-
 }
 
-
-
+/* 愛心動畫 */
 .heart{
-
     position:fixed;
-
     font-size:28px;
-
     pointer-events:none;
-
     animation:floatUp 5s linear forwards;
-
 }
-
-
 
 @keyframes floatUp{
-
-    from{
-
-        transform:translateY(0);
-
-        opacity:1;
-
-    }
-
-    to{
-
-        transform:translateY(-110vh);
-
-        opacity:0;
-
-    }
-
+    from{ transform:translateY(0); opacity:1; }
+    to{ transform:translateY(-110vh); opacity:0; }
 }
 
+/* 按鍵碎裂動畫 */
+@keyframes shatter {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0.5) rotate(180deg); opacity: 0; }
+}
 
+/* 碎裂效果粒子 */
+.fragment {
+  position: fixed;
+  width: 50px;
+  height: 20px;
+  background-color: #ff4f93;
+  color: white;
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  pointer-events: none;
+  animation: explode 0.5s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(0) translate(var(--x), var(--y)); }
+}
+
+/* 煙火動畫設定 */
+.pyro {
+  position: absolute;
+  top: -20px; left: -20px; right: -20px; bottom: -20px;
+  z-index: 5;
+  pointer-events: none;
+}
+.pyro > .before, .pyro > .after {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  box-shadow: -120px -218.66667px blue, 248px -16.66667px #00ff84, 190px 16.33333px #002bff, -113px -308.66667px #ff009d, -109px -287.66667px #ffb300, -50px -313.66667px #ff006e, 226px -31.66667px #ff4000, 180px -351.66667px #ff00d0, -12px -338.66667px #00f6ff, 220px -388.66667px #99ff00, -69px -27.66667px #ff004c, -185px -321.66667px #004cff, 150px -150px #ff00e6, 250px -150px #c8ff00, 300px -150px #ff009d, 350px -150px #00ff84, 400px -150px #002bff;
+  animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
+}
+.pyro > .after {
+  animation-delay: 1.25s, 1.25s, 1.25s;
+  animation-duration: 1.25s, 1.25s, 6.25s;
+}
+
+@keyframes bang {
+  to { box-shadow: -120px -218.66667px #fff, 248px -16.66667px #fff, 190px 16.33333px #fff, -113px -308.66667px #fff, -109px -287.66667px #fff, -50px -313.66667px #fff, 226px -31.66667px #fff, 180px -351.66667px #fff, -12px -338.66667px #fff, 220px -388.66667px #fff, -69px -27.66667px #fff, -185px -321.66667px #fff, 150px -150px #fff, 250px -150px #fff, 300px -150px #fff, 350px -150px #fff, 400px -150px #fff; }
+}
+@keyframes gravity {
+  to { transform: translateY(200px); opacity: 0; }
+}
+@keyframes position {
+  0%, 19.9% { top: 0%; left: 10%; }
+  20%, 39.9% { top: -40%; left: 50%; }
+  40%, 59.9% { top: -20%; left: 90%; }
+  60%, 79.9% { top: 10%; left: 70%; }
+  80%, 99.9% { top: 40%; left: 20%; }
+}
 
 @media(max-width:600px){
-
-
-
-    .card{
-
-        padding:25px;
-
-    }
-
-
-
-    .question{
-
-        font-size:24px;
-
-    }
-
-
-
-    button{
-
-        width:100%;
-
-        margin:8px 0;
-
-    }
-
+    .card{ padding:25px; }
+    .question{ font-size:24px; }
+    button{ width:100%; margin:8px 0; }
 }
-
 </style>
-
 </head>
-
-
 
 <body>
 
-
-
 <div class="card">
-
-
-
-    <!-- 第一題 -->
-
-    <div id="page1">
-
-
-
-        <h1>💖 AI 戀愛人格測驗 💖</h1>
-
-
-
+    <div id="page0">
+        <h1>🛍️ 購物慾測驗 🛍️</h1>
         <div class="question">
-
-            你愛我嗎？
-
+            你願意幫 Christine 買什麼？
         </div>
-
-
-
-        <button class="primary" onclick="goQuestion2()">
-
-            超愛我美麗的女友 Christine
-
+        <button class="primary shatt" onclick="shatterButton(this)">
+            買包包 👜
         </button>
-
-
-
-        <button
-
-            id="noLoveBtn"
-
-            class="secondary"
-
-            onclick="shrinkNoLove()">
-
-            不愛
-
+        <button class="primary shatt" onclick="shatterButton(this)">
+            買晚餐 🍽️
         </button>
-
-
-
-        <div class="message" id="msg1"></div>
-
-
-
+        <button class="primary shatt" onclick="shatterButton(this)">
+            只要是 Christine 想要的都買～ 💖
+        </button>
+        <div class="message" id="msg0"></div>
     </div>
 
-
-
-    <!-- 第二題 -->
+    <div id="page1" class="hidden">
+        <h1>💖 AI 戀愛人格測驗 💖</h1>
+        <div class="question"> 你愛我嗎？ </div>
+        <button class="primary" onclick="goQuestion2()">
+            超愛我美麗的女友 Christine
+        </button>
+        <button id="noLoveBtn" class="secondary" onclick="shrinkNoLove()">
+            不愛
+        </button>
+        <div class="message" id="msg1"></div>
+    </div>
 
     <div id="page2" class="hidden">
-
-
-
         <h1>👑 第二題 👑</h1>
-
-
-
-        <div class="question">
-
-            家裡誰最大？
-
-        </div>
-
-
-
-        <button
-
-            class="primary"
-
-            onclick="showResult()">
-
+        <div class="question"> 家裡誰最大？ </div>
+        <button class="primary" onclick="showResult()">
             我美麗的女友 Christine
-
         </button>
-
-
-
-        <button
-
-            id="tonyBtn"
-
-            class="blue">
-
+        <button id="tonyBtn" class="blue">
             帥氣無比的 Tony
-
         </button>
-
-
-
         <div class="message" id="msg2"></div>
-
-
-
     </div>
-
-
-
-    <!-- 結局 -->
 
     <div id="result" class="hidden">
-
-
-
         <h1>🎉 恭喜通過求生測驗 🎉</h1>
-
-
-
-        <h2 style="margin-top:20px;">
-
-            生存率：100%
-
-        </h2>
-
-
-
-        <h2 style="margin-top:15px;">
-
-            最愛的人：Christine ❤️
-
-        </h2>
-
-
-
-        <h2 style="margin-top:15px;">
-
-            家裡最大：Christine 👑
-
-        </h2>
-
-
-
+        <h2 style="margin-top:20px;"> 生存率：100% </h2>
+        <h2 style="margin-top:15px;"> 最愛的人：Christine ❤️ </h2>
+        <h2 style="margin-top:15px;"> 家裡最大：Christine 👑 </h2>
         <p style="margin-top:25px;font-size:20px;">
-
-            系統判定：
-
-            Tony 非常有求生慾 😆
-
+            系統判定： Tony 非常有求生慾 😆
         </p>
-
-
-
         <br>
-
-
-
-        <button class="primary" onclick="buyAll()">
-
-            我願意幫 Christine 買飲料
-
+        <button class="primary" onclick="buyAll()"> 
+            刷 Tony 的卡，讓 Christine 開心 💳
         </button>
-
-
-
-        <button class="primary" onclick="buyAll()">
-
-            我願意幫 Christine 買晚餐
-
-        </button>
-
-
-
-        <button class="primary" onclick="buyAll()">
-
-            我願意幫 Christine 買珍珠奶茶
-
-        </button>
-
-
-
     </div>
-
-
 
 </div>
 
-
+<div id="fireworks" class="pyro hidden">
+  <div class="before"></div>
+  <div class="after"></div>
+</div>
 
 <script>
-
-
-
 let scaleSize = 1;
 
-
-
 /* Android 震動 */
-
 function vibrate(pattern){
-
-
-
     if(navigator.vibrate){
-
         navigator.vibrate(pattern);
-
     }
-
-
-
 }
 
+/* 碎裂與煙火 */
+function shatterButton(btn){
+  vibrate(100);
 
+  if (btn.innerText.includes("想要的都買")) {
+    btn.style.backgroundColor = "#4caf50"; 
+    document.getElementById("msg0").innerText = "💖 這才是完美答案！";
+    startFireworks();
+    vibrate([200, 100, 200, 100, 500]);
+    setTimeout(() => {
+      document.getElementById("page0").classList.add("hidden");
+      document.getElementById("page1").classList.remove("hidden");
+      stopFireworks();
+    }, 2000); 
+  } else {
+    btn.style.animation = "shatter 0.5s ease-out forwards"; 
+    document.getElementById("msg0").innerText = "💥 生存警報！Christine 覺得不夠完整！";
+    
+    const numFragments = 8;
+    const btnRect = btn.getBoundingClientRect();
+    const btnText = btn.innerText;
+
+    for (let i = 0; i < numFragments; i++) {
+      const frag = document.createElement('div');
+      frag.className = 'fragment';
+      frag.innerText = btnText;
+      
+      const x = btnRect.left + (btnRect.width / 2);
+      const y = btnRect.top + (btnRect.height / 2);
+      frag.style.left = x - 25 + 'px'; 
+      frag.style.top = y - 10 + 'px';
+
+      const randX = (Math.random() - 0.5) * 600; 
+      const randY = (Math.random() - 0.5) * 600;
+      frag.style.setProperty('--x', randX + 'px');
+      frag.style.setProperty('--y', randY + 'px');
+
+      document.body.appendChild(frag);
+
+      setTimeout(() => { frag.remove(); }, 500);
+    }
+  
+    setTimeout(() => { btn.style.display = 'none'; }, 500);
+  }
+}
+
+function startFireworks() {
+  document.getElementById("fireworks").classList.remove("hidden");
+}
+
+function stopFireworks() {
+  document.getElementById("fireworks").classList.add("hidden");
+}
 
 /* 第一題 */
-
-
-
 function shrinkNoLove(){
-
-
-
     vibrate(250);
-
-
-
     scaleSize -= 0.15;
-
-
-
-    if(scaleSize < 0.08){
-
-        scaleSize = 0.08;
-
-    }
-
-
-
+    if(scaleSize < 0.08){ scaleSize = 0.08; }
     const btn = document.getElementById("noLoveBtn");
-
-
-
     btn.style.transform = `scale(${scaleSize})`;
-
-
-
     const texts = [
-
         "🥺 你是不是按錯了？",
-
         "😏 再想想看喔～",
-
         "⚠️ 系統偵測到危險答案",
-
         "💔 Christine 有點難過",
-
         "🚨 生存率下降中..."
-
     ];
-
-
-
-    document.getElementById("msg1").innerHTML =
-
-        texts[Math.floor(Math.random()*texts.length)];
-
-
-
+    document.getElementById("msg1").innerHTML = texts[Math.floor(Math.random()*texts.length)];
     if(scaleSize <= 0.4){
-
-
-
         vibrate([150,100,150,100,400]);
-
-
-
-        document.getElementById("msg1").innerHTML =
-
-            "🚨 Christine 已收到警報通知！";
-
+        document.getElementById("msg1").innerHTML = "🚨 Christine 已收到警報通知！";
     }
-
 }
-
-
 
 function goQuestion2(){
-
-
-
-    document.getElementById("page1")
-
-        .classList.add("hidden");
-
-
-
-    document.getElementById("page2")
-
-        .classList.remove("hidden");
-
+    document.getElementById("page1").classList.add("hidden");
+    document.getElementById("page2").classList.remove("hidden");
 }
-
-
 
 /* 第二題 */
-
-
-
 const tonyBtn = document.getElementById("tonyBtn");
-
-
-
 tonyBtn.addEventListener("mouseover",runAway);
-
 tonyBtn.addEventListener("touchstart",runAway);
 
-
-
 function runAway(){
-
-
-
     vibrate(80);
-
-
-
-    const x =
-
-        Math.random() *
-
-        (window.innerWidth - 250);
-
-
-
-    const y =
-
-        Math.random() *
-
-        (window.innerHeight - 100);
-
-
-
+    const x = Math.random() * (window.innerWidth - 250);
+    const y = Math.random() * (window.innerHeight - 100);
     tonyBtn.style.position = "fixed";
-
     tonyBtn.style.left = x + "px";
-
     tonyBtn.style.top = y + "px";
-
-
-
-    document.getElementById("msg2").innerHTML =
-
-        "🤣 Tony 不敢跟 Christine 搶地位";
-
+    document.getElementById("msg2").innerHTML = "🤣 Tony 不敢跟 Christine 搶地位";
 }
-
-
 
 function showResult(){
-
-
-
-    document.getElementById("page2")
-
-        .classList.add("hidden");
-
-
-
-    document.getElementById("result")
-
-        .classList.remove("hidden");
-
-
-
+    document.getElementById("page2").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
     startHearts();
-
 }
-
-
 
 /* 愛心動畫 */
-
-
-
 function startHearts(){
-
-
-
     setInterval(()=>{
-
-
-
-        const heart =
-
-            document.createElement("div");
-
-
-
+        const heart = document.createElement("div");
         heart.className = "heart";
-
-
-
-        heart.innerHTML =
-
-            ["❤️","💕","💖","💗","💘"]
-
-            [Math.floor(Math.random()*5)];
-
-
-
-        heart.style.left =
-
-            Math.random()*window.innerWidth
-
-            + "px";
-
-
-
+        heart.innerHTML = ["❤️","💕","💖","💗","💘"][Math.floor(Math.random()*5)];
+        heart.style.left = Math.random()*window.innerWidth + "px";
         heart.style.bottom = "-30px";
-
-
-
         document.body.appendChild(heart);
-
-
-
-        setTimeout(()=>{
-
-            heart.remove();
-
-        },5000);
-
-
-
+        setTimeout(()=>{ heart.remove(); },5000);
     },300);
-
 }
-
-
 
 /* 結局 */
-
-
-
 function buyAll(){
-
-
-
     vibrate([100,50,100]);
+    alert( `💖 恭喜完成認證 💖
 
+Tony 已成功解鎖最高求生境界！
+主動遞上魔法小卡 💳✨
 
-
-    alert(
-
-`💖 感謝您的支持 💖
-
-
-
-系統已自動為您勾選：
-
-
-
-✅ 買飲料
-
-✅ 買晚餐
-
-✅ 買珍珠奶茶
-
-
-
-Christine 表示非常滿意 😆`
-
-    );
-
+Christine 表示滿意，今天也是幸福的一天 🥰` );
 }
-
-
-
 </script>
 
-
-
 </body>
-
 </html>
